@@ -103,3 +103,33 @@ class Brick(GameObject):
         else:
             self.canvas.itemconfig(self.item,
                                    fill=Brick.COLORS[self.hits])
+
+class Game(tk.Frame):
+    def __init__(self, master):
+        super(Game, self).__init__(master)
+        self.lives = 3
+        self.width = 610
+        self.height = 400
+        self.canvas = tk.Canvas(self, bg='#121212',
+                                width=self.width,
+                                height=self.height,
+                                highlightthickness=0)
+        self.canvas.pack()
+        self.pack()
+
+        self.items = {}
+        self.ball = None
+        self.paddle = Paddle(self.canvas, self.width/2, 326)
+        self.items[self.paddle.item] = self.paddle
+        for x in range(5, self.width - 5, 75):
+            self.add_brick(x + 37.5, 50, 3)
+            self.add_brick(x + 37.5, 75, 2)
+            self.add_brick(x + 37.5, 100, 1)
+
+        self.hud = None
+        self.setup_game()
+        self.canvas.focus_set()
+        self.canvas.bind('<Left>',
+                         lambda _: self.paddle.move(-15))
+        self.canvas.bind('<Right>',
+                         lambda _: self.paddle.move(15))
