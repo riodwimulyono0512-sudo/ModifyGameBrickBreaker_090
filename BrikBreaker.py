@@ -133,3 +133,40 @@ class Game(tk.Frame):
                          lambda _: self.paddle.move(-15))
         self.canvas.bind('<Right>',
                          lambda _: self.paddle.move(15))
+
+def setup_game(self):
+        self.add_ball()
+        self.update_lives_text()
+        self.text = self.draw_text(300, 220,
+                                   'Press Space to start', color='#ffffff', size='22')
+        self.canvas.bind('<space>', lambda _: self.start_game())
+
+    def add_ball(self):
+        if self.ball is not None:
+            self.ball.delete()
+        paddle_coords = self.paddle.get_position()
+        x = (paddle_coords[0] + paddle_coords[2]) * 0.5
+        self.ball = Ball(self.canvas, x, 310)
+        self.paddle.set_ball(self.ball)
+
+    def add_brick(self, x, y, hits):
+        brick = Brick(self.canvas, x, y, hits)
+        self.items[brick.item] = brick
+
+    def draw_text(self, x, y, text, size='30', color='#00ffcc'):
+        font = ('Arial', size, 'bold')
+        return self.canvas.create_text(x, y, text=text,
+                                       font=font, fill=color)
+
+    def update_lives_text(self):
+        text = 'Lives: %s' % self.lives
+        if self.hud is None:
+            self.hud = self.draw_text(60, 20, text, size='14', color='#ffffff')
+        else:
+            self.canvas.itemconfig(self.hud, text=text)
+
+    def start_game(self):
+        self.canvas.unbind('<space>')
+        self.canvas.delete(self.text)
+        self.paddle.ball = None
+        self.game_loop()
