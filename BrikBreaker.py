@@ -104,12 +104,14 @@ class Brick(GameObject):
             self.canvas.itemconfig(self.item,
                                    fill=Brick.COLORS[self.hits])
 
+
 class Game(tk.Frame):
     def __init__(self, master):
         super(Game, self).__init__(master)
         self.lives = 3
         self.width = 610
         self.height = 400
+        # Diubah ke background warna gelap (Dark Mode Arcade)
         self.canvas = tk.Canvas(self, bg='#121212',
                                 width=self.width,
                                 height=self.height,
@@ -134,7 +136,7 @@ class Game(tk.Frame):
         self.canvas.bind('<Right>',
                          lambda _: self.paddle.move(15))
 
-def setup_game(self):
+    def setup_game(self):
         self.add_ball()
         self.update_lives_text()
         self.text = self.draw_text(300, 220,
@@ -171,7 +173,7 @@ def setup_game(self):
         self.paddle.ball = None
         self.game_loop()
 
-def game_loop(self):
+    def game_loop(self):
         self.check_collisions()
         num_bricks = len(self.canvas.find_withtag('brick'))
         if num_bricks == 0: 
@@ -200,7 +202,8 @@ def game_loop(self):
         objects = [self.items[x] for x in items if x in self.items]
         self.ball.collide(objects)
 
-    if __name__ == '__main__':
+
+if __name__ == '__main__':
     root = tk.Tk()
     root.title('Brick Breaker Game')
     game = Game(root)
