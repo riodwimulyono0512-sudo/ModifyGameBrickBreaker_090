@@ -170,3 +170,32 @@ def setup_game(self):
         self.canvas.delete(self.text)
         self.paddle.ball = None
         self.game_loop()
+
+def game_loop(self):
+        self.check_collisions()
+        num_bricks = len(self.canvas.find_withtag('brick'))
+        if num_bricks == 0: 
+            self.ball.speed = 0
+            self.draw_text(300, 200, 'YOU WIN!', color='#69f0ae', size='35')
+        elif self.ball.get_position()[3] >= self.height: 
+            self.ball.speed = 0
+            self.lives -= 1
+            self.update_lives_text()
+            if self.lives < 0:
+                self.draw_text(300, 200, 'GAME OVER', color='#ff5252', size='35')
+            else:
+                self.after(1000, self.reset_turn)
+        else:
+            self.ball.update()
+            self.after(30, self.game_loop)
+
+    def reset_turn(self):
+        self.add_ball()
+        self.text = self.draw_text(300, 220, 'Press Space to continue', color='#ffffff', size='18')
+        self.canvas.bind('<space>', lambda _: self.start_game())
+
+    def check_collisions(self):
+        ball_coords = self.ball.get_position()
+        items = self.canvas.find_overlapping(*ball_coords)
+        objects = [self.items[x] for x in items if x in self.items]
+        self.ball.collide(objects)
